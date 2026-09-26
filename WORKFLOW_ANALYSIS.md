@@ -13,7 +13,7 @@ These are the four steps in the `build-and-test` job:
 (There's also a separate `deploy` job with its own step, "Deploy to GitHub Pages," but it only runs after `build-and-test` succeeds and only on a push to main.)
 
 ## 3. What does the "Checkout code" step do and why is it necessary?
-It uses `actions/checkout@v4` to pull a copy of the repository's code into the GitHub Actions runner (a fresh, temporary virtual machine). It's necessary because the runner starts with an empty environment — without this step, there would be no files for the validator, link checker, or deploy step to act on.
+It uses `actions/checkout@v4` to pull a copy of the repository's code into the GitHub Actions runner (a fresh, temporary virtual machine). It's necessary because the runner starts with an empty environment — without this step, there would be no files for the validator, link checker, or deploy step to act on. Without it, none of the later steps, including validation and deployment, would have any files to work with, since each workflow run starts on a completely fresh virtual machine with nothing on it.
 
 ## 4. What is the purpose of the environment configuration?
 The `environment: name: github-pages` block in the `deploy` job tells GitHub this deployment targets the `github-pages` environment, which is what enables GitHub Pages deployment permissions and lets GitHub track deployment history/status for that environment. The `url: ${{ steps.deployment.outputs.page_url }}` line captures the live URL that the deploy step outputs, so it shows up as a clickable link in the GitHub Actions run summary and in the repo's deployments tab.
